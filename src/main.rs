@@ -1,7 +1,7 @@
 use std::io;
 use gnuplot::{AxesCommon, Caption, Coordinate::Graph, Figure};
 
-fn display_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
+fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 {
     let mut fg = Figure::new();
     fg.axes2d()
@@ -109,7 +109,7 @@ fn main()
         y = reciprocal(x.clone(), y.clone());
     }
 
-    fg = display_graph(x, y);
+    fg = create_graph(x, y);
 
     fg.show().unwrap();
 }
