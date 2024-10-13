@@ -1,3 +1,4 @@
+use std::io;
 use gnuplot::{AxesCommon, Caption, Coordinate::Graph, Figure};
 
 fn display_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
@@ -19,7 +20,24 @@ fn display_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 
 fn main() 
 {
-    let x : Vec<f32> = vec![-3., -2., -1., 0., 1., 2., 3.];
+    let mut x : Vec<f32> = Vec::new();
+    let mut input = String::new();
+
+    println!("Enter min-x value: ");
+    io::stdin().read_line(&mut input).expect("Failed to read input");
+    let min_x : i32 = input.trim().parse().expect("Invalid input");
+    input.clear();
+
+    println!("Enter max-x value: ");
+    io::stdin().read_line(&mut input).expect("Failed to read input");
+    let max_x : i32 = input.trim().parse().expect("Invalid input");
+    input.clear();
+
+    for n in min_x..(max_x + 1)
+    {
+        x.push(n as f32);
+    }
+
     let mut y : Vec<f32> = Vec::new();
     let mut fg : Figure = Figure::new();
 
