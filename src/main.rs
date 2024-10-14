@@ -1,5 +1,5 @@
 use std::io;
-use gnuplot::{AutoOption::{Auto, Fix}, AxesCommon, Caption, Coordinate::Graph, Figure};
+use gnuplot::{AutoOption::{Auto, Fix}, AxesCommon, Caption, Coordinate::Graph, Figure, PlotOption::{Color, LineWidth}};
 
 fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 {
@@ -14,7 +14,7 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
         .lines(
             &x,
             &y,
-            &[Caption("Graph")],
+            &[Caption("Graph"), LineWidth(3.), Color("black")],
         );
 
     return fg;
