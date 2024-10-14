@@ -1,14 +1,16 @@
 use std::io;
-use gnuplot::{AxesCommon, Caption, Coordinate::Graph, Figure};
+use gnuplot::{AutoOption::{Auto, Fix}, AxesCommon, Caption, Coordinate::Graph, Figure};
 
 fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 {
     let mut fg = Figure::new();
     fg.axes2d()
-        .set_title("A plot", &[])
+        .set_title("Graph", &[])
         .set_legend(Graph(0.5), Graph(0.9), &[], &[])
         .set_x_label("x", &[])
         .set_y_label("y", &[])
+        .set_y_range(Fix(-10.), Fix(10.))
+        .set_x_range(Auto, Auto)
         .lines(
             &x,
             &y,
@@ -20,6 +22,8 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 
 fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
 {
+    let mut eq_t : f32 = 0.;
+    let mut eq_b : f32 = 0.;
     let mut eq : f32 = 0.;
 
     if eq_bottom.is_empty()
@@ -28,14 +32,38 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
         {
             for (j, elemj) in eq_top.clone().into_iter().enumerate()
             {
-                eq += elemi.powi(j.try_into().unwrap())*elemj;
+                eq_t += elemi.powf(j as f32) * elemj;
             }
-            y.push(eq);
+            y.push(eq_t);
+            eq_t = 0.;
         }
     }
     else
     {
+        for (_i, elemi) in x.clone().into_iter().enumerate()
+        {
+            for (j, elemj) in eq_top.clone().into_iter().enumerate()
+            {
+                eq_t += elemi.powf(j as f32) * elemj;
+            }
 
+            for (j, elemj) in eq_bottom.clone().into_iter().enumerate()
+            {
+                eq_b += elemi.powf(j as f32) * elemj;
+            }
+
+            if (eq_b != 0.)
+            {
+                eq = eq_t/eq_b;
+            }
+            else
+            {
+                eq = 100000000000.;
+            }
+
+            y.push(eq);
+            eq = 0.;
+        }
     }
 
     return y;
@@ -61,9 +89,9 @@ fn main()
     let max_x : i32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    for n in min_x..(max_x + 1)
+    for n in min_x * 10..(max_x + 1)* 10
     {
-        x.push(n as f32);
+        x.push(n as f32 / 10.);
     }
 
     loop
@@ -92,12 +120,12 @@ fn main()
     {
         loop
         {
-            println!("Enter bottom coefficient as decimal (space to exit): ");
+            println!("Enter bottom coefficient as decimal (q to exit): ");
             io::stdin().read_line(&mut input).expect("Failed to read input");
             let ch : String = input.trim().parse().expect("Invalid input");
             input.clear();
 
-            if ch != " "
+            if !ch.eq("q")
             {
                 eq_bottom.push(ch.parse::<f32>().unwrap());
             }
@@ -109,6 +137,7 @@ fn main()
     }
 
     eq_top.reverse();
+    eq_bottom.reverse();
 
     y = calculate(eq_top, eq_bottom, x.clone(), y.clone());
 
