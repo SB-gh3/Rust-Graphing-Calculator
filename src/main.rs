@@ -46,12 +46,14 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
                 eq_t += elemi.powf(j as f32) * elemj;
             }
 
-            for (j, elemj) in eq_bottom.clone().into_iter().enumerate()
+            for (k, elemk) in eq_bottom.clone().into_iter().enumerate()
             {
-                eq_b += elemi.powf(j as f32) * elemj;
+                eq_b += elemi.powf(k as f32) * elemk;
             }
 
             y.push(eq_t / eq_b);
+            eq_t = 0.;
+            eq_b = 0.;
         }
     }
 
