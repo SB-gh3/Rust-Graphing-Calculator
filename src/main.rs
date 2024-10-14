@@ -52,7 +52,7 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
                 eq_b += elemi.powf(j as f32) * elemj;
             }
 
-            if (eq_b != 0.)
+            if eq_b != 0.
             {
                 eq = eq_t/eq_b;
             }
