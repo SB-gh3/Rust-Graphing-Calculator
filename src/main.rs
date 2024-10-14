@@ -20,14 +20,14 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>)
         fg.show().unwrap();
 }
 
-fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
+fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : &Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
 {
     let mut eq_t : f32 = 0.;
     let mut eq_b : f32 = 0.;
 
     if eq_bottom.is_empty()
     {
-        for (_i, elemi) in x.clone().into_iter().enumerate()
+        for (_i, elemi) in x.into_iter().enumerate()
         {
             for (j, elemj) in eq_top.clone().into_iter().enumerate()
             {
@@ -39,7 +39,7 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
     }
     else
     {
-        for (_i, elemi) in x.clone().into_iter().enumerate()
+        for (_i, elemi) in x.into_iter().enumerate()
         {
             for (j, elemj) in eq_top.clone().into_iter().enumerate()
             {
@@ -65,7 +65,6 @@ fn main()
     let mut input = String::new();
     let mut x : Vec<f32> = Vec::new();
     let mut y : Vec<f32> = Vec::new();
-    
     let mut eq_top : Vec<f32> = Vec::new();
     let mut eq_bottom : Vec<f32> = Vec::new();
     let mut boo : bool = false;
@@ -130,7 +129,7 @@ fn main()
     eq_top.reverse();
     eq_bottom.reverse();
 
-    y = calculate(eq_top, eq_bottom, x.clone(), y.clone());
+    y = calculate(eq_top, eq_bottom, &x, y);
 
     create_graph(x, y);
 }
