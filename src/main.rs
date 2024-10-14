@@ -80,9 +80,9 @@ fn main()
     let max_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    for n in (min_x * 100.) as i32..(max_x * 100.) as i32
+    for n in (min_x * 10000.) as i32..(max_x * 10000.) as i32
     {
-        x.push(n as f32 / 100.);
+        x.push(n as f32 / 10000.);
     }
 
     loop
