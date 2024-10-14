@@ -89,7 +89,7 @@ fn main()
     let max_x : i32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    for n in min_x * 10..(max_x + 1)* 10
+    for n in min_x * 10..max_x * 10
     {
         x.push(n as f32 / 10.);
     }
