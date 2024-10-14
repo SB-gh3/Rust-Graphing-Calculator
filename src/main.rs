@@ -1,8 +1,9 @@
 use std::io;
 use gnuplot::{AutoOption::Fix, AxesCommon, Caption, Coordinate::Graph, Figure, PlotOption::{Color, LineWidth}};
 
-fn create_graph(x : Vec<f32>, y : Vec<f32>, mut fg : Figure) -> Figure
+fn create_graph(x : Vec<f32>, y : Vec<f32>)
 {
+    let mut fg : Figure = Figure::new();
     fg.axes2d()
         .set_title("Graph", &[])
         .set_legend(Graph(0.5), Graph(0.9), &[], &[])
@@ -16,7 +17,7 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>, mut fg : Figure) -> Figure
             &[Caption("Graph"), LineWidth(3.), Color("black")],
         );
 
-    return fg;
+        fg.show().unwrap();
 }
 
 fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
@@ -64,7 +65,7 @@ fn main()
     let mut input = String::new();
     let mut x : Vec<f32> = Vec::new();
     let mut y : Vec<f32> = Vec::new();
-    let mut fg : Figure = Figure::new();
+    
     let mut eq_top : Vec<f32> = Vec::new();
     let mut eq_bottom : Vec<f32> = Vec::new();
     let mut boo : bool = false;
@@ -131,7 +132,5 @@ fn main()
 
     y = calculate(eq_top, eq_bottom, x.clone(), y.clone());
 
-    fg = create_graph(x, y, fg);
-
-    fg.show().unwrap();
+    create_graph(x, y);
 }
