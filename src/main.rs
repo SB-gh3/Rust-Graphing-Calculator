@@ -1,9 +1,8 @@
 use std::io;
 use gnuplot::{AutoOption::Fix, AxesCommon, Caption, Coordinate::Graph, Figure, PlotOption::{Color, LineWidth}};
 
-fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
+fn create_graph(x : Vec<f32>, y : Vec<f32>, mut fg : Figure) -> Figure
 {
-    let mut fg = Figure::new();
     fg.axes2d()
         .set_title("Graph", &[])
         .set_legend(Graph(0.5), Graph(0.9), &[], &[])
@@ -65,7 +64,7 @@ fn main()
     let mut input = String::new();
     let mut x : Vec<f32> = Vec::new();
     let mut y : Vec<f32> = Vec::new();
-    let mut fg : Figure;
+    let mut fg : Figure = Figure::new();
     let mut eq_top : Vec<f32> = Vec::new();
     let mut eq_bottom : Vec<f32> = Vec::new();
     let mut boo : bool = false;
@@ -80,9 +79,9 @@ fn main()
     let max_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    for n in (min_x * 10000.) as i32..(max_x * 10000.) as i32
+    for n in (min_x * 1000.) as i32..(max_x * 1000.) as i32
     {
-        x.push(n as f32 / 10000.);
+        x.push(n as f32 / 1000.);
     }
 
     loop
@@ -132,7 +131,7 @@ fn main()
 
     y = calculate(eq_top, eq_bottom, x.clone(), y.clone());
 
-    fg = create_graph(x, y);
+    fg = create_graph(x, y, fg);
 
     fg.show().unwrap();
 }
