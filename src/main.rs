@@ -1,5 +1,5 @@
 use std::io;
-use gnuplot::{AutoOption::{Auto, Fix}, AxesCommon, Caption, Coordinate::Graph, Figure, PlotOption::{Color, LineWidth}};
+use gnuplot::{AutoOption::Fix, AxesCommon, Caption, Coordinate::Graph, Figure, PlotOption::{Color, LineWidth}};
 
 fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
 {
@@ -9,8 +9,8 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
         .set_legend(Graph(0.5), Graph(0.9), &[], &[])
         .set_x_label("x", &[])
         .set_y_label("y", &[])
-        .set_y_range(Fix(-10.), Fix(10.))
-        .set_x_range(Auto, Auto)
+        .set_y_range(Fix(-1.), Fix(1.))
+        .set_x_range(Fix(-1.), Fix(1.))
         .lines(
             &x,
             &y,
@@ -70,17 +70,17 @@ fn main()
 
     println!("Enter min-x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
-    let min_x : i32 = input.trim().parse().expect("Invalid input");
+    let min_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
     println!("Enter max-x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
-    let max_x : i32 = input.trim().parse().expect("Invalid input");
+    let max_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    for n in min_x * 10..max_x * 10
+    for n in (min_x * 100.) as i32..(max_x * 100.) as i32
     {
-        x.push(n as f32 / 10.);
+        x.push(n as f32 / 100.);
     }
 
     loop
