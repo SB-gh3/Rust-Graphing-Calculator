@@ -12,54 +12,30 @@ fn create_graph(x : Vec<f32>, y : Vec<f32>) -> Figure
         .lines(
             &x,
             &y,
-            &[Caption("Parabola")],
+            &[Caption("Graph")],
         );
 
     return fg;
 }
 
-fn parabolic(x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
+fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
 {
-    for i in x.into_iter()
-    {
-        y.push(i.powi(2));
-    }
+    let mut eq : f32 = 0.;
 
-    return y;
-}
-
-fn sqrt(x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
-{
-    for i in x.into_iter()
+    if eq_bottom.is_empty()
     {
-        if !i.sqrt().is_nan()
+        for (_i, elemi) in x.clone().into_iter().enumerate()
         {
-            y.push(i.sqrt());
-        }
-        else
-        {
-            y.push(0.);
+            for (j, elemj) in eq_top.clone().into_iter().enumerate()
+            {
+                eq += elemi.powi(j.try_into().unwrap())*elemj;
+            }
+            y.push(eq);
         }
     }
-
-    return y;
-}
-
-fn exponential(x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
-{
-    for i in x.into_iter()
+    else
     {
-        y.push((2 as f32).powi(i as i32));
-    }
 
-    return y;
-}
-
-fn reciprocal(x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
-{
-    for i in x.into_iter()
-    {
-        y.push(1./i);
     }
 
     return y;
@@ -67,10 +43,13 @@ fn reciprocal(x : Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
 
 fn main() 
 {
-    let mut x : Vec<f32> = Vec::new();
     let mut input = String::new();
+    let mut x : Vec<f32> = Vec::new();
     let mut y : Vec<f32> = Vec::new();
     let mut fg : Figure = Figure::new();
+    let mut eq_top : Vec<f32> = Vec::new();
+    let mut eq_bottom : Vec<f32> = Vec::new();
+    let mut boo : bool = false;
 
     println!("Enter min-x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
@@ -87,27 +66,51 @@ fn main()
         x.push(n as f32);
     }
 
-    println!("Parent Function (parabolic, sqrt, exponential, reciprocal): ");
-    io::stdin().read_line(&mut input).expect("Failed to read input");
-    let choice : String = input.trim().parse().expect("Invalid input");
-    input.clear();
+    loop
+    {
+        println!("Enter coefficient as decimal (/ to enter reciprocal, q to exit): ");
+        io::stdin().read_line(&mut input).expect("Failed to read input");
+        let ch : String = input.trim().parse().expect("Invalid input");
+        input.clear();
 
-    if choice == "parabolic"
-    {
-        y = parabolic(x.clone(), y.clone());
+        if !ch.eq("/") && !ch.eq("q")
+        {
+            eq_top.push(ch.parse::<f32>().unwrap());
+        }
+        else if ch.eq("/")
+        {
+            boo = true;
+            break;
+        }
+        else
+        {
+            break;
+        }
     }
-    else if choice == "sqrt"
+
+    if boo
     {
-        y = sqrt(x.clone(), y.clone());
+        loop
+        {
+            println!("Enter bottom coefficient as decimal (space to exit): ");
+            io::stdin().read_line(&mut input).expect("Failed to read input");
+            let ch : String = input.trim().parse().expect("Invalid input");
+            input.clear();
+
+            if ch != " "
+            {
+                eq_bottom.push(ch.parse::<f32>().unwrap());
+            }
+            else
+            {
+                break;
+            }
+        }
     }
-    else if choice == "exponential"
-    {
-        y = exponential(x.clone(), y.clone());
-    }
-    else if choice == "reciprocal"
-    {
-        y = reciprocal(x.clone(), y.clone());
-    }
+
+    eq_top.reverse();
+
+    y = calculate(eq_top, eq_bottom, x.clone(), y.clone());
 
     fg = create_graph(x, y);
 
