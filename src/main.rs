@@ -24,7 +24,6 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
 {
     let mut eq_t : f32 = 0.;
     let mut eq_b : f32 = 0.;
-    let mut eq : f32 = 0.;
 
     if eq_bottom.is_empty()
     {
@@ -52,17 +51,7 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : Vec<f32>, mut y : Vec<
                 eq_b += elemi.powf(j as f32) * elemj;
             }
 
-            if eq_b != 0.
-            {
-                eq = eq_t/eq_b;
-            }
-            else
-            {
-                eq = 100000000000.;
-            }
-
-            y.push(eq);
-            eq = 0.;
+            y.push(eq_t / eq_b);
         }
     }
 
@@ -74,7 +63,7 @@ fn main()
     let mut input = String::new();
     let mut x : Vec<f32> = Vec::new();
     let mut y : Vec<f32> = Vec::new();
-    let mut fg : Figure = Figure::new();
+    let mut fg : Figure;
     let mut eq_top : Vec<f32> = Vec::new();
     let mut eq_bottom : Vec<f32> = Vec::new();
     let mut boo : bool = false;
