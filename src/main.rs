@@ -20,7 +20,7 @@ fn display_graph(x : Vec<f32>, y : Vec<f32>)
     fg.show().unwrap();
 }
 
-fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : &Vec<f32>, mut y : Vec<f32>) -> Vec<f32>
+fn calculate(eq_top : &Vec<f32>, eq_bottom : &Vec<f32>, x : &Vec<f32>, mut y : Vec<f32>, ty : u8) -> Vec<f32>
 {
     let mut eq_t : f32 = 0.;
     let mut eq_b : f32 = 0.;
@@ -29,11 +29,25 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : &Vec<f32>, mut y : Vec
     {
         for (_i, elemi) in x.into_iter().enumerate()
         {
-            for (j, elemj) in eq_top.clone().into_iter().enumerate()
+            for (j, elemj) in eq_top.into_iter().enumerate()
             {
-                eq_t += elemi.powf(j as f32) * elemj;
+                match ty
+                {
+                    1_u8 => eq_t += elemi.powf(j as f32) * elemj,
+                    2_u8 => eq_t += elemi.powf(j as f32) * elemj,
+                    3_u8 => eq_t += elemj.powf(j as f32 * elemi),
+                    _ => println!("ERROR"),
+                }
             }
-            y.push(eq_t);
+
+            match ty
+            {
+                1_u8 => y.push(eq_t),
+                2_u8 => y.push(eq_t.sqrt()),
+                3_u8 => y.push(eq_t),
+                _ => println!("ERROR"),
+            }
+
             eq_t = 0.;
         }
     }
@@ -41,17 +55,36 @@ fn calculate(eq_top : Vec<f32>, eq_bottom : Vec<f32>, x : &Vec<f32>, mut y : Vec
     {
         for (_i, elemi) in x.into_iter().enumerate()
         {
-            for (j, elemj) in eq_top.clone().into_iter().enumerate()
+            for (j, elemj) in eq_top.into_iter().enumerate()
             {
-                eq_t += elemi.powf(j as f32) * elemj;
+                match ty
+                {
+                    1_u8 => eq_t += elemi.powf(j as f32) * elemj,
+                    2_u8 => eq_t += elemi.powf(j as f32) * elemj,
+                    3_u8 => eq_t += elemj.powf(j as f32 * elemi),
+                    _ => println!("ERROR"),
+                }
             }
 
-            for (k, elemk) in eq_bottom.clone().into_iter().enumerate()
+            for (k, elemk) in eq_bottom.into_iter().enumerate()
             {
-                eq_b += elemi.powf(k as f32) * elemk;
+                match ty
+                {
+                    1_u8 => eq_b += elemi.powf(k as f32) * elemk,
+                    2_u8 => eq_b += elemi.powf(k as f32) * elemk,
+                    3_u8 => eq_b += elemk.powf(k as f32 * elemi),
+                    _ => println!("ERROR"),
+                }
             }
 
-            y.push(eq_t / eq_b);
+            match ty
+            {
+                1_u8 => y.push(eq_t / eq_b),
+                2_u8 => y.push((eq_t / eq_b).sqrt()),
+                3_u8 => y.push(eq_t / eq_b),
+                _ => println!("ERROR"),
+            }
+
             eq_t = 0.;
             eq_b = 0.;
         }
@@ -68,6 +101,11 @@ fn main()
     let mut eq_top : Vec<f32> = Vec::new();
     let mut eq_bottom : Vec<f32> = Vec::new();
     let mut boo : bool = false;
+
+    println!("1. Polynomial\n2. Square Root\n3. Exponential (Experimental)");
+    io::stdin().read_line(&mut input).expect("Failed to read input");
+    let ty : u8 = input.trim().parse().expect("Invalid input");
+    input.clear();
 
     println!("Enter min-x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
@@ -129,7 +167,7 @@ fn main()
     eq_top.reverse();
     eq_bottom.reverse();
 
-    y = calculate(eq_top, eq_bottom, &x, y);
+    y = calculate(&eq_top, &eq_bottom, &x, y, ty);
 
     display_graph(x, y);
 }
