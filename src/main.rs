@@ -35,7 +35,7 @@ fn calculate(eq_top : &Vec<f32>, eq_bottom : &Vec<f32>, x : &Vec<f32>, mut y : V
                 {
                     1_u8 => eq_t += elemi.powf(j as f32) * elemj,
                     2_u8 => eq_t += elemi.powf(j as f32) * elemj,
-                    3_u8 => eq_t += elemj.powf(j as f32 * elemi),
+                    3_u8 => eq_t += elemj.powf((j as f32).powf(*elemi)),
                     _ => println!("ERROR"),
                 }
             }
@@ -61,7 +61,7 @@ fn calculate(eq_top : &Vec<f32>, eq_bottom : &Vec<f32>, x : &Vec<f32>, mut y : V
                 {
                     1_u8 => eq_t += elemi.powf(j as f32) * elemj,
                     2_u8 => eq_t += elemi.powf(j as f32) * elemj,
-                    3_u8 => eq_t += elemj.powf(j as f32 * elemi),
+                    3_u8 => eq_t += elemj.powf((j as f32).powf(*elemi)),
                     _ => println!("ERROR"),
                 }
             }
@@ -72,7 +72,7 @@ fn calculate(eq_top : &Vec<f32>, eq_bottom : &Vec<f32>, x : &Vec<f32>, mut y : V
                 {
                     1_u8 => eq_b += elemi.powf(k as f32) * elemk,
                     2_u8 => eq_b += elemi.powf(k as f32) * elemk,
-                    3_u8 => eq_b += elemk.powf(k as f32 * elemi),
+                    3_u8 => eq_b += elemk.powf((k as f32).powf(*elemi)),
                     _ => println!("ERROR"),
                 }
             }
@@ -107,12 +107,12 @@ fn main()
     let ty : u8 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    println!("Enter min-x value: ");
+    println!("Enter min x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
     let min_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
 
-    println!("Enter max-x value: ");
+    println!("Enter max x value: ");
     io::stdin().read_line(&mut input).expect("Failed to read input");
     let max_x : f32 = input.trim().parse().expect("Invalid input");
     input.clear();
@@ -124,7 +124,7 @@ fn main()
 
     loop
     {
-        println!("Enter coefficient as decimal (/ to enter reciprocal, q to exit): ");
+        println!("Enter coefficient as decimal (/ to enter rational, q to exit): ");
         io::stdin().read_line(&mut input).expect("Failed to read input");
         let ch : String = input.trim().parse().expect("Invalid input");
         input.clear();
